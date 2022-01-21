@@ -2,6 +2,9 @@ import { ChevronDownIcon } from "@heroicons/react/outline";
 import { shuffle } from "lodash";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { playlistIdState, playlistState } from "../atoms/playlistAtom";
+import useSpotify from "../hooks/useSpotify";
 
 const colours = [
   "from-pink-500",
@@ -23,12 +26,21 @@ const colours = [
 ];
 
 const Dashboard = () => {
+  const spotfiyApi = useSpotify();
   const { data: session } = useSession();
   const [colour, setColour] = useState(colours[0]);
+  const playlistId = useRecoilValue(playlistIdState);
+  const [playlist, setPlaylist] = useRecoilState(playlistState);
   useEffect(() => {
     const selected = shuffle(colours).pop();
     setColour(shuffle(colours).pop());
-  }, []);
+  }, [playlistId]);
+  useEffect(() => {
+    spotfiyApi
+      .getPlaylist(playlistId)
+      .then((data) => setPlaylist(data.body))
+      .catch((error) => console.log(error));
+  }, [spotfiyApi, playlistId]);
   return (
     <div className="flex-grow">
       <header className="absolute top-5 right-8 text-white">
@@ -44,8 +56,23 @@ const Dashboard = () => {
         </div>
       </header>
       <section
-        className={`flex items-end space-x-7 bg-gradient-to-b to-black ${colour} h-80 text-white p-8`}
-      ></section>
+        className={`flex items-end space-x-7 bg-gradient-to-b h-80 to-black ${colour} h-80 text-white p-8`}
+      >
+        <img
+          className="h-44 w-44 shadow-2xl"
+          src={playlist?.images[0].url}
+          alt=""
+        />
+        <div>
+          <p>PLAYLIST</p>
+          <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl">
+            {playlist?.name}
+          </h1>
+        </div>
+      </section>
+      <div>
+        <></>
+      </div>
     </div>
   );
 };
