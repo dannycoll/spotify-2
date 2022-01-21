@@ -9,6 +9,7 @@ import {
 } from "@heroicons/react/outline";
 import { signOut, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+
 import { useRecoilState } from "recoil";
 import { playlistIdState } from "../atoms/playlistAtom";
 import useSpotify from "../hooks/useSpotify";
@@ -65,7 +66,6 @@ const Sidebar = () => {
           <p>Your Episodes</p>
         </button>
         <hr className="border-t-[0.1px] border-gray-900" />
-
         {playlists.map((x: any) => (
           <p
             className="cursor-pointer hover:text-white"
