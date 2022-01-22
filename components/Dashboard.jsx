@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { playlistIdState, playlistState } from "../atoms/playlistAtom";
 import useSpotify from "../hooks/useSpotify";
+import Songs from "./Songs";
 
 const colours = [
   "from-pink-500",
@@ -42,7 +43,7 @@ const Dashboard = () => {
       .catch((error) => console.log(error));
   }, [spotfiyApi, playlistId]);
   return (
-    <div className="flex-grow">
+    <div className="flex-grow h-screen overflow-y-scroll scrollbar-hide">
       <header className="absolute top-5 right-8 text-white">
         <div className="flex items-center bg-black space-x-2 opacity-90 hover:opacity-80 cursor-pointer rounded-full p-1 pr-2">
           <img
@@ -71,7 +72,7 @@ const Dashboard = () => {
         </div>
       </section>
       <div>
-        <></>
+        <Songs />
       </div>
     </div>
   );
